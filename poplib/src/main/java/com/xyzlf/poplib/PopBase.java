@@ -14,28 +14,43 @@ import android.widget.PopupWindow;
  * Created by zhanglifeng on 2017/3/28.
  * Pop Base
  */
-
 public class PopBase {
 
     public static final float DEFAULT_WINDOW_ALPHA_VALUE = 0.3f;
 
-    protected Activity mActivity;
-    protected PopupWindow mPopWindow;
-    protected boolean isShowAlphaWindow;
-    protected float mAlphaValue = DEFAULT_WINDOW_ALPHA_VALUE;
+    private Activity mActivity;
+    private PopupWindow mPopWindow;
+    private boolean isShowAlphaWindow;
+    private float mAlphaValue = DEFAULT_WINDOW_ALPHA_VALUE;
 
-    public PopBase(Activity activity, View layout) {
-        this.mActivity = activity;
-        initPop(layout);
+    protected OnPopBaseListener onPopBaseListener;
+
+    public interface OnPopBaseListener {
+        void onDismiss();
     }
 
-    protected void initPop(View layout) {
+    public PopBase(Activity activity, View layout) {
+        this(activity, layout, R.style.popShowAnim, null);
+    }
+
+    public PopBase(Activity activity, View layout, OnPopBaseListener onPopBaseListener) {
+        this(activity, layout, R.style.popShowAnim, onPopBaseListener);
+    }
+
+
+    public PopBase(Activity activity, View layout, @StyleRes int animationStyle, OnPopBaseListener onPopBaseListener) {
+        this.mActivity = activity;
+        this.onPopBaseListener = onPopBaseListener;
+        initPop(layout, animationStyle);
+    }
+
+    private void initPop(View layout, @StyleRes int animationStyle) {
         if (null == layout) {
             return;
         }
         mPopWindow = new PopupWindow(layout, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
         mPopWindow.setBackgroundDrawable(null);
-        mPopWindow.setAnimationStyle(R.style.popShowAnim);
+        mPopWindow.setAnimationStyle(animationStyle);
         mPopWindow.setInputMethodMode(PopupWindow.INPUT_METHOD_NEEDED);
         mPopWindow.getContentView().measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
         mPopWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
@@ -44,11 +59,12 @@ public class PopBase {
                 if (isShowAlphaWindow) {
                     changeWindowAlpha(1f);//pop消失，透明度恢复
                 }
+                if (null != onPopBaseListener) {
+                    onPopBaseListener.onDismiss();
+                }
             }
         });
 
-        //必须设置该项才能保证相应按键事件
-        layout.setFocusableInTouchMode(true);
         //点击外部消失
         layout.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -57,6 +73,8 @@ public class PopBase {
                 return true;
             }
         });
+        //必须设置该项才能保证相应按键事件
+        layout.setFocusableInTouchMode(true);
         layout.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -91,17 +109,11 @@ public class PopBase {
         }
     }
 
-    public void setAnimationStyle(@StyleRes int animationStyle) {
-        if (null != mPopWindow) {
-            mPopWindow.setAnimationStyle(animationStyle);
-        }
-    }
-
-    protected void setAlphaValue(float alphaValue) {
+    public void setAlphaValue(float alphaValue) {
         this.mAlphaValue = alphaValue;
     }
 
-    protected void setShowAlphaWindow(boolean showAlphaWindow) {
+    public void setShowAlphaWindow(boolean showAlphaWindow) {
         this.isShowAlphaWindow = showAlphaWindow;
     }
 

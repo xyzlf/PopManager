@@ -12,11 +12,22 @@ import java.util.List;
  * Created by zhanglifeng on 2017/3/28.
  * PopWindow Manager
  */
-public class PopCommon {
+public class PopCommon implements PopBase.OnPopBaseListener {
 
     private PopBase mPopBase;
+    private OnPopCommonListener onPopCommonListener;
+
+    public interface OnPopCommonListener {
+        void onItemClick(AdapterView<?> parent, View view, int position, long id);
+        void onDismiss();
+    }
 
     public PopCommon(Activity activity, List<PopModel> popModels) {
+        this(activity, popModels, null);
+    }
+
+    public PopCommon(Activity activity, List<PopModel> popModels, OnPopCommonListener onPopCommonListener) {
+        this.onPopCommonListener = onPopCommonListener;
         init(activity, popModels);
     }
 
@@ -27,15 +38,21 @@ public class PopCommon {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 dismissPop();
+                if (null != onPopCommonListener) {
+                    onPopCommonListener.onItemClick(parent, view, position, id);
+                }
             }
         });
         PopAdapter adapter = new PopAdapter(popModels);
         listView.setAdapter(adapter);
-        mPopBase = new PopBase(activity, layout);
+        mPopBase = new PopBase(activity, layout, this);
         mPopBase.setShowAlphaWindow(true);
     }
 
     public void showPop(View targetView, int x, int y) {
+        if (null == targetView) {
+            return;
+        }
         if (null != mPopBase) {
             mPopBase.show(targetView, x, y);
         }
@@ -47,4 +64,10 @@ public class PopCommon {
         }
     }
 
+    @Override
+    public void onDismiss() {
+        if (null != onPopCommonListener) {
+            onPopCommonListener.onDismiss();
+        }
+    }
 }
