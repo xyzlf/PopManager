@@ -16,6 +16,8 @@ public class PopCommon implements PopBase.OnPopBaseListener {
 
     private PopBase mPopBase;
     private OnPopCommonListener onPopCommonListener;
+    private boolean isShowAplhaWindow;
+    private PopAdapter adapter;
 
     public interface OnPopCommonListener {
         void onItemClick(AdapterView<?> parent, View view, int position, long id);
@@ -43,10 +45,23 @@ public class PopCommon implements PopBase.OnPopBaseListener {
                 }
             }
         });
-        PopAdapter adapter = new PopAdapter(popModels);
+        adapter = new PopAdapter(popModels);
         listView.setAdapter(adapter);
         mPopBase = new PopBase(activity, layout, this);
-        mPopBase.setShowAlphaWindow(true);
+    }
+
+    public void setPopModels(List<PopModel> popModels) {
+        if (null != adapter) {
+            adapter.setPopModels(popModels);
+        }
+    }
+
+    /**
+     * 是否显示黑色透明背景
+     * @param showAplhaWindow boolean
+     */
+    public void setShowAplhaWindow(boolean showAplhaWindow) {
+        isShowAplhaWindow = showAplhaWindow;
     }
 
     public void showPop(View targetView, int x, int y) {
@@ -54,6 +69,7 @@ public class PopCommon implements PopBase.OnPopBaseListener {
             return;
         }
         if (null != mPopBase) {
+            mPopBase.setShowAlphaWindow(isShowAplhaWindow);
             mPopBase.show(targetView, x, y);
         }
     }

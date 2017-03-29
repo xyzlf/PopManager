@@ -1,4 +1,5 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.novoda.bintray-release'//添加
 
 android {
     compileSdkVersion 25
@@ -19,9 +20,52 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+
+    lintOptions {
+        checkReleaseBuilds false
+        // Or, if you prefer, you can continue to check for errors in release builds,
+        // but continue the build even when errors are found:
+        abortOnError false
+    }
+
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES.txt'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/dependencies.txt'
+        exclude 'META-INF/LGPL2.1'
+    }
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:25.3.0'
 }
+
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+String localBintrayUser = properties.getProperty("bintray.user")
+String localBintrayApikey = properties.getProperty("bintray.apikey")
+
+//推送指令
+//gradlew clean build bintrayUpload
+//添加
+publish {
+    bintrayUser = localBintrayUser   //bintray.com用户名
+    bintrayKey = localBintrayApikey  //bintray.com apikey
+    dryRun = false
+    userOrg = localBintrayUser
+    groupId = 'com.'+ localBintrayUser +'.poplib'//jcenter上的路径
+    artifactId = 'popcommon'//项目名称
+    publishVersion = '0.0.1'//版本号
+    desc = 'PopWindow lib，方便使用PopWindow显示菜单效果'
+    website = 'https://github.com/xyzlf/PopManager'
+}
+

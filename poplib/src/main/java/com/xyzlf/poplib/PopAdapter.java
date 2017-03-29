@@ -21,6 +21,11 @@ class PopAdapter extends BaseAdapter {
         this.popModels = popModels;
     }
 
+    public void setPopModels(List<PopModel> popModels) {
+        this.popModels = popModels;
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getCount() {
         return null == popModels ? 0 : popModels.size();

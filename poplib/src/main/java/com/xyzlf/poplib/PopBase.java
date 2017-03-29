@@ -57,7 +57,7 @@ public class PopBase {
             @Override
             public void onDismiss() {
                 if (isShowAlphaWindow) {
-                    changeWindowAlpha(1f);//pop消失，透明度恢复
+                    changeWindowAlpha(1f);
                 }
                 if (null != onPopBaseListener) {
                     onPopBaseListener.onDismiss();
@@ -87,6 +87,10 @@ public class PopBase {
     }
 
     public void show(View menuBtn, int x, int y) {
+       this.show(menuBtn, Gravity.TOP | Gravity.RIGHT, x, y);
+    }
+
+    public void show(View menuBtn, int gravity, int x, int y) {
         if (mPopWindow == null) {
             return;
         }
@@ -95,10 +99,10 @@ public class PopBase {
             mPopWindow.dismiss();
         } else {
             if (isShowAlphaWindow) {
-                changeWindowAlpha(mAlphaValue); //改变窗口透明度
+                changeWindowAlpha(mAlphaValue);
             }
             mPopWindow.setFocusable(true);
-            mPopWindow.showAtLocation(menuBtn, Gravity.TOP | Gravity.RIGHT, x, y);
+            mPopWindow.showAtLocation(menuBtn, gravity, x, y);
             mPopWindow.update();
         }
     }
@@ -118,7 +122,7 @@ public class PopBase {
     }
 
     /**
-     * 更改窗口透明度
+     * Change window alpha
      * @param alpha (alphaValue 0.0 - 1.0)
      */
     private void changeWindowAlpha(float alpha){
