@@ -11,6 +11,12 @@ PopWindow实现下拉菜单项,包装了一个通用组件，使用者也可以�
 
 # 使用方式
 
+1、初始化数据源：List<PopModel> list = new ArrayList<>();
+
+2、初始化PopCommon对象：PopCommon popCommon = new PopCommon(this, list); 或者舔加回调监听：PopCommon popCommon = new PopCommon(this, list, new PopCommon.OnPopCommonListener());
+
+3、显示Pop：popCommon.showPop(targetView, offsetX, offsetY);
+
 	private void showMenuPop(View menuView) {
         PopModel feedPopModel = new PopModel();
         feedPopModel.setDrawableId(R.drawable.icon_search);
