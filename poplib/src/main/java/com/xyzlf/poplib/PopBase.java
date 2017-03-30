@@ -22,8 +22,9 @@ public class PopBase {
     private PopupWindow mPopWindow;
     private boolean isShowAlphaWindow;
     private float mAlphaValue = DEFAULT_WINDOW_ALPHA_VALUE;
+    private int screenWidth;
 
-    protected OnPopBaseListener onPopBaseListener;
+    private OnPopBaseListener onPopBaseListener;
 
     public interface OnPopBaseListener {
         void onDismiss();
@@ -41,6 +42,7 @@ public class PopBase {
     public PopBase(Activity activity, View layout, @StyleRes int animationStyle, OnPopBaseListener onPopBaseListener) {
         this.mActivity = activity;
         this.onPopBaseListener = onPopBaseListener;
+        screenWidth = activity.getResources().getDisplayMetrics().widthPixels;
         initPop(layout, animationStyle);
     }
 
@@ -87,7 +89,11 @@ public class PopBase {
     }
 
     public void show(View menuBtn, int x, int y) {
-       this.show(menuBtn, Gravity.TOP | Gravity.RIGHT, x, y);
+        if (null == menuBtn || null == mPopWindow) {
+            return;
+        }
+        int xLocation = screenWidth - mPopWindow.getContentView().getMeasuredWidth() - x;
+        this.show(menuBtn, Gravity.TOP | Gravity.START, xLocation, y);
     }
 
     public void show(View menuBtn, int gravity, int x, int y) {
