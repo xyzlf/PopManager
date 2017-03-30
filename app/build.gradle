@@ -27,7 +27,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.3.0'
     testCompile 'junit:junit:4.12'
 
-    compile 'com.xyzlf.poplib:popcommon:0.0.1'
+    compile 'com.xyzlf.poplib:popcommon:0.0.2'
 
 //    compile project(':poplib')
 }

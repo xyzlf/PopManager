@@ -3,7 +3,7 @@ PopWindow实现下拉菜单项,包装了一个通用组件，使用者也可以�
 
 # Gradle
 
-	compile 'com.xyzlf.poplib:popcommon:0.0.1'
+	compile 'com.xyzlf.poplib:popcommon:0.0.2'
 
 # 效果图
 <img src="pop_menu.png"/><img src="pop_item.png"/>

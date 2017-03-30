@@ -64,7 +64,7 @@ publish {
     userOrg = localBintrayUser
     groupId = 'com.'+ localBintrayUser +'.poplib'//jcenter上的路径
     artifactId = 'popcommon'//项目名称
-    publishVersion = '0.0.1'//版本号
+    publishVersion = '0.0.2'//版本号
     desc = 'PopWindow lib，方便使用PopWindow显示菜单效果'
     website = 'https://github.com/xyzlf/PopManager'
 }
